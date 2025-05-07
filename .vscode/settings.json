@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./tubiana_etal_2022/pepr2ds"
+    ]
+}

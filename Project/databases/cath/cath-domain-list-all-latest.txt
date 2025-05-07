@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+<head>
+<title>Index of /cath/releases/latest-release on orengoftp.biochem.ucl.ac.uk:21</title>
+</head>
+<body>
+<h1>Index of /cath/releases/latest-release on orengoftp.biochem.ucl.ac.uk:21</h1>
+<hr>
+<pre>
+  2025 Jan 15 13:38  Directory   <a href="ftp://orengoftp.biochem.ucl.ac.uk:21/cath/releases/latest-release/cath-classification-data/">cath-classification-data/</a> 
+  2025 Jan 15 13:38  Directory   <a href="ftp://orengoftp.biochem.ucl.ac.uk:21/cath/releases/latest-release/non-redundant-data-sets/">non-redundant-data-sets/</a> 
+  2025 Jan 15 13:38  Directory   <a href="ftp://orengoftp.biochem.ucl.ac.uk:21/cath/releases/latest-release/sequence-data/">sequence-data/</a> 
+</pre>
+</body>
+</html>

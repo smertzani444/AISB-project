@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: pepr2ds
+Version: 0.1.0
+Summary: PePr2DS: Create and analysis dataset for peripheral membrane proteins
+Author: Thibault Tubiana and Phillippe Samer
+Author-email: T. Tubiana <tubiana.thibault@gmail.com>, P. Samer <samer@uib.no>
+License: GPL3
+Platform: Linux
+Platform: Solaris
+Platform: Mac OS-X
+Platform: darwin
+Platform: Unix
+Platform: win32
+License-File: LICENSE
