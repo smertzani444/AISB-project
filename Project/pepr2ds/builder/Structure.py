@@ -576,7 +576,9 @@ class Structure(Attributes):
 
 
 
-    def build_structural_dataset(self, checkpoint_name = "checkpoint_structure"):
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+
+def build_structural_dataset(self, checkpoint_name = "checkpoint_structure"):
         updatemode = False
         recalculating = True
 
@@ -668,6 +670,7 @@ class Structure(Attributes):
 
 
         return(DATASET)
+
 
 
     def add_protrusions(self,
