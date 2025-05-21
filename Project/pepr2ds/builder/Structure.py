@@ -1,3 +1,4 @@
+import re
 from .Attributes import Attributes
 
 import pandas as pd
@@ -354,7 +355,7 @@ class Structure(Attributes):
 
     # df = pdb_to_datafram_with_dssp(pdbtest)
     # instanciate the progressbar
-    import os
+    import os 
 
     def clean_pdb(self, pdb_path):
         """
