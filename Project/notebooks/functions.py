@@ -189,19 +189,23 @@ class IBSClassifier:
         print(f"Final model trained on all data and saved to {save_path}")
         return model
 
-    def evaluate_model(self, model, X, y, runs=30, test_size=0.2, save_path=None, cmap="Blues"):
+    def evaluate_model(self, model, X, y, runs=30, test_size=0.2, subset_name=None, save_path=None, cmap="Blues"):
         import copy
 
         metrics = {'auc': [], 'prauc': [], 'mcc': []}
         best_auc = 0.0
         best_model = None
+        best_cm = None
+        best_y_test = None
+        best_y_pred = None
 
         for i in range(runs):
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, stratify=y)
             if self.scale:
                 scaler = StandardScaler()
                 X_train = scaler.fit_transform(X_train)
                 X_test = scaler.transform(X_test)
+
             model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
 
@@ -210,15 +214,6 @@ class IBSClassifier:
                 if hasattr(model, "predict_proba")
                 else model.decision_function(X_test)
             )
-
-            cm = confusion_matrix(y_test, y_pred)
-            cm_df = pd.DataFrame(cm, index=["Actual: 0", "Actual: 1"], columns=["Predicted: 0", "Predicted: 1"])
-            plt.figure(figsize=(5, 4))
-            sns.heatmap(cm_df, annot=True, fmt="d", cmap=cmap)
-            plt.title(f"{model.__class__.__name__} Confusion Matrix")
-            plt.ylabel("True label")
-            plt.xlabel("Predicted label")
-            plt.show()
 
             auc_val = roc_auc_score(y_test, y_scores)
             prauc_val = average_precision_score(y_test, y_scores)
@@ -233,15 +228,29 @@ class IBSClassifier:
             if auc_val > best_auc:
                 best_auc = auc_val
                 best_model = copy.deepcopy(model)
+                best_cm = confusion_matrix(y_test, y_pred)
+                best_y_test = y_test
+                best_y_pred = y_pred
                 print(f"  ↳ New best model (AUC={best_auc:.4f})")
 
         results = {k: self.summarize(v) for k, v in metrics.items()}
+
+        # Show final confusion matrix only for best model
+        if best_cm is not None:
+            cm_df = pd.DataFrame(best_cm, index=["Actual: 0", "Actual: 1"], columns=["Predicted: 0", "Predicted: 1"])
+            plt.figure(figsize=(5, 4))
+            sns.heatmap(cm_df, annot=True, fmt="d", cmap=cmap)
+            plt.title(f"{subset_name} Confusion Matrix (Best Run)")
+            plt.ylabel("True label")
+            plt.xlabel("Predicted label")
+            plt.show()
 
         if save_path is not None and best_model is not None:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
             joblib.dump(best_model, save_path)
             print(f"Best model (highest AUC: {best_auc:.4f}) saved to {save_path}")
 
+        # Plot metric distributions
         for metric, values in metrics.items():
             plt.figure(figsize=(8, 6))
             sns.boxplot(y=values)
@@ -249,7 +258,7 @@ class IBSClassifier:
             plt.ylabel(metric.upper())
             plt.show()
 
-        return results
+        return results, best_y_test, best_y_pred, X_test
 
     @staticmethod
     def summarize(values):
